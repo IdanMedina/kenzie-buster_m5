@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from rest_framework.views import APIView, Response, Request, status
-from .models import User
+from rest_framework_simplejwt.views import TokenObtainPairView
 from .serializers import UserSerializer
 
 
