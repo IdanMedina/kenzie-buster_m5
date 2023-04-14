@@ -10,16 +10,15 @@ from .permissions import IsEmployee
 
 class MovieView(APIView):
     authentication_classes = [JWTAuthentication]
-    permission_classes = [IsAuthenticatedOrReadOnly]
+    permission_classes = [IsAuthenticatedOrReadOnly, IsEmployee]
 
     def post(self, request: Request) -> Response:
         serializer = MovieSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        print(request.user)
-        serializer.save(user=request.user)
-        serializer.save(added_by=request.user["email"])
 
-        return (serializer.data, status.HTTP_201_CREATED)
+        serializer.save(user=request.user)
+
+        return Response(serializer.data, status.HTTP_201_CREATED)
 
     def get(self, request: Request) -> Response:
         movie_set = Movie.objects.all()
@@ -33,7 +32,7 @@ class MovieInfoView(APIView):
     permission_classes = [IsAuthenticatedOrReadOnly, IsEmployee]
 
     def get(self, request: Request, movie_id: int) -> Response:
-        get_movie = get_object_or_404(Movie, id=movie_id)
+        get_movie = get_object_or_404(Movie, pk=movie_id)
         serializer = MovieSerializer(get_movie)
 
         return Response(serializer.data, status.HTTP_200_OK)

@@ -17,5 +17,6 @@ class Movie(models.Model):
         max_length=20, choices=MovieRating.choices, default=MovieRating.G,
         null=True)
     synopsis = models.TextField(null=True, default=None)
-    user = models.OneToOneField(
-        "users.User", on_delete=models.CASCADE, default=None)
+    user = models.ForeignKey(
+        "users.User", on_delete=models.CASCADE, related_name="movies",
+        default=None)
