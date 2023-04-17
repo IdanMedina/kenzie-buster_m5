@@ -14,9 +14,6 @@ class UserView(APIView):
         serializer = UserSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
 
-        if serializer.validated_data["is_employee"] is True:
-            serializer.validated_data["is_superuser"] = True
-
         serializer.save()
 
         return Response(serializer.data, status.HTTP_201_CREATED)
@@ -40,5 +37,6 @@ class UserInfoView(APIView):
 
         serializer = UserSerializer(user, request.data, partial=True)
         serializer.is_valid(raise_exception=True)
+        serializer.save()
 
         return Response(serializer.data, status.HTTP_200_OK)
